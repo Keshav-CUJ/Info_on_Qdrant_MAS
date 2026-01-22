@@ -1,1 +1,248 @@
-Hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Integrity MAS - System Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; display: block; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: -30px;
+            border-radius: 8px;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 2rem;
+        }
+
+        section:last-child { border-bottom: none; }
+
+        h2 { color: var(--secondary-color); font-size: 1.8rem; margin-top: 0; }
+        h3 { color: var(--primary-color); margin-top: 1.5rem; }
+
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            color: #d63384;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .diagram {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Election Integrity MAS</h1>
+        <span class="subtitle">Multi-Agent System for Misinformation Detection & Voter Assistance</span>
+    </header>
+
+    <div class="container">
+        
+        <section id="about">
+            <h2>🗳️ What is this MAS?</h2>
+            <p>
+                The <strong>Election Integrity Multi-Agent System (MAS)</strong> is an AI-driven framework designed to combat misinformation and assist election officials in real-time. Unlike standard chatbots, it maintains persistent memory of the user's role (e.g., Presiding Officer vs. Journalist) and uses a Graph-based architecture to plan, research, and verify claims.
+            </p>
+            <div class="feature-grid">
+                <div class="card">
+                    <strong>🕵️ Fact Checking</strong>
+                    <p>Verifies rumors against official Election Commission manuals and live web search.</p>
+                </div>
+                <div class="card">
+                    <strong>🖼️ Visual Forensics</strong>
+                    <p>Analyzes uploaded images (EVMs, VVPATs) to detect tampering or mismatch.</p>
+                </div>
+                <div class="card">
+                    <strong>🧠 Long-Term Memory</strong>
+                    <p>Remembers user persona and preferences across different sessions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>🏗️ System Architecture</h2>
+            <p>The system is built on <strong>LangGraph</strong>, treating the conversation as a state machine. It moves through distinct "Nodes" to process information intelligently.</p>
+            
+            <div class="diagram">
+                [ Loader Node ] ➜ [ Query Generator ] ➜ [ Search Tool ] ➜ [ Responder ] ➜ [ Memory Writer ]
+            </div>
+
+            <ul>
+                <li><strong>Loader Node:</strong> Fetches the user's "Psychological Profile" from Qdrant before the chat starts.</li>
+                <li><strong>Query Generator:</strong> Breaks a complex user question into specific search plans (Visual vs. Text).</li>
+                <li><strong>Search Tool:</strong> Executes Hybrid Search (Dense + Sparse) on the Knowledge Base.</li>
+                <li><strong>Responder:</strong> Synthesizes the final answer using the User Context and Retrieved Evidence.</li>
+                <li><strong>Memory Writer:</strong> Updates the user's profile with new preferences or facts after the conversation.</li>
+            </ul>
+        </section>
+
+        <section id="qdrant">
+            <h2>💾 Qdrant as Memory & Vector DB</h2>
+            <p>We use <strong>Qdrant</strong> for two distinct purposes, separated by collections:</p>
+
+            <h3>1. The Knowledge Base (Static)</h3>
+            <p>Stores official documents (PDFs, Manuals, Guidelines). This is "Read-Only" during chat.</p>
+            <ul>
+                <li><strong>Collection:</strong> <code>election_manuals</code></li>
+                <li><strong>Search Method:</strong> Semantic Search (What does this mean?) + Keyword Search (Specific terms).</li>
+            </ul>
+
+            <h3>2. Long-Term Memory (Dynamic)</h3>
+            <p>Stores User Profiles. This is "Read-Write".</p>
+            <ul>
+                <li><strong>Collection:</strong> <code>user_profiles</code></li>
+                <li><strong>Mechanism:</strong> We do not "Search" for users; we <strong>Retrieve</strong> them using a Deterministic UUID.</li>
+                <li><strong>ID Logic:</strong> <code>uuid5(user_id)</code> ensures "officer_keshav" always maps to the exact same vector ID.</li>
+            </ul>
+        </section>
+
+        <section id="embeddings">
+            <h2>🧮 How Embeddings are Generated</h2>
+            <p>The system uses a <strong>Multi-Model Approach</strong> to handle different data types. These models run locally to ensure privacy and speed.</p>
+
+            <table>
+                <tr>
+                    <th>Data Type</th>
+                    <th>Model Name</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><strong>Text</strong></td>
+                    <td><code>intfloat/multilingual-e5-base</code></td>
+                    <td>Converts queries and manuals into 768-dimension vectors. Understands Hindi & English.</td>
+                </tr>
+                <tr>
+                    <td><strong>Images</strong></td>
+                    <td><code>clip-ViT-B-32</code></td>
+                    <td>Converts images into vectors. Allows searching for "Broken Seal" even if the text doesn't say it.</td>
+                </tr>
+                <tr>
+                    <td><strong>Keywords</strong></td>
+                    <td><code>FastEmbed (BM25)</code></td>
+                    <td>Sparse vectors for exact keyword matching (e.g., "Form 17C").</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="search">
+            <h2>🔍 How Search Works</h2>
+            <p>We use <strong>Hybrid Search (Reciprocal Rank Fusion)</strong> to get the best of both worlds.</p>
+
+            <h3>The Process</h3>
+            <ol>
+                <li><strong>Dense Search:</strong> Finds <em>concepts</em>. (e.g., "Machine not working" matches "EVM malfunction").</li>
+                <li><strong>Sparse Search:</strong> Finds <em>exact keywords</em>. (e.g., "Rule 49MA").</li>
+                <li><strong>Fusion:</strong> Qdrant combines these scores. If a document appears in both lists, it is ranked higher.</li>
+            </ol>
+
+            <h3>Visual Search</h3>
+            <p>If an image is uploaded:</p>
+            <pre>Image Vector = CLIP.encode(image)
+Results = client.search(vector=Image_Vector)</pre>
+            <p>It finds visually similar images in the database (e.g., matching a user's photo of a VVPAT against official reference photos).</p>
+        </section>
+
+        <section id="memory-logic">
+            <h2>🧠 Memory Update & "Decay"</h2>
+            <p>Memory is not just a log of chats; it is a <strong>Structured Psychological Profile</strong>.</p>
+
+            <h3>Update Mechanism (The Scribe Node)</h3>
+            <p>After every interaction, an LLM analyzes the chat and updates the JSON profile:</p>
+            <pre>{
+  "persona": "Presiding Officer",
+  "style": "Technical & Concise",
+  "preferences": { "show_twitter_links": false }
+}</pre>
+            
+            <h3>Consolidation (Decay Substitute)</h3>
+            <p>Instead of mathematical decay, we use <strong>Summarization Consolidation</strong>. When the profile is updated, the LLM rewrites the summary. Old, irrelevant details are naturally dropped (forgotten) by the LLM during the rewrite, while important facts (Role, Location) are preserved. This mimics human memory consolidation.</p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Documentation generated for MAS Election Agent • 2026</p>
+    </footer>
+
+</body>
+</html>
