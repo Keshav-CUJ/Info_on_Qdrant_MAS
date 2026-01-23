@@ -1,248 +1,701 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Integrity MAS - System Documentation</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CONVOLVE 4.0 - Misinformation Detection</title>
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --bg-color: #f8fafc;
-            --text-color: #334155;
-            --code-bg: #1e293b;
-            --code-text: #e2e8f0;
-        }
+      :root {
+        --primary-color: #0f4761;
+        --secondary-color: #467886;
+        --text-color: #333;
+        --code-red: #ee0000;
+        --bg-color: #f9f9f9;
+        --card-bg: #ffffff;
+      }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+      }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: var(--card-bg);
+        padding: 40px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 { margin: 0; font-size: 2.5rem; }
-        .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; display: block; }
+      /* Typography */
+      h1,
+      h2,
+      h3 {
+        color: var(--primary-color);
+        margin-top: 1.5em;
+      }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-top: -30px;
-            border-radius: 8px;
-        }
+      h1 {
+        font-size: 2.5em;
+        text-align: center;
+        margin-bottom: 0.2em;
+      }
+      h2 {
+        font-size: 1.8em;
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 10px;
+      }
+      h3 {
+        font-size: 1.4em;
+      }
 
-        section {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 2rem;
-        }
+      .text-center {
+        text-align: center;
+      }
+      .subtitle {
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+        color: #555;
+      }
+      .track-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: var(--secondary-color);
+      }
+      .italic-desc {
+        font-style: italic;
+        color: #666;
+        margin: 20px 0;
+        display: block;
+      }
 
-        section:last-child { border-bottom: none; }
+      /* Lists */
+      ul {
+        list-style-type: disc;
+        margin-left: 20px;
+      }
+      ol {
+        list-style-type: decimal;
+        margin-left: 20px;
+      }
+      li {
+        margin-bottom: 8px;
+      }
 
-        h2 { color: var(--secondary-color); font-size: 1.8rem; margin-top: 0; }
-        h3 { color: var(--primary-color); margin-top: 1.5rem; }
+      /* Code / JSON Blocks */
+      .code-block {
+        background-color: #f4f4f4;
+        border-left: 5px solid var(--primary-color);
+        padding: 15px;
+        font-family: "Courier New", Courier, monospace;
+        overflow-x: auto;
+        margin: 20px 0;
+        font-size: 0.99em;
+      }
 
-        code {
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            color: #d63384;
-            font-size: 0.9em;
-        }
+      .code-red {
+        color: var(--code-red);
+      }
+      .code-bold {
+        font-weight: bold;
+      }
 
-        pre {
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
+      /* Image Placeholders */
+      .img-placeholder {
+        width: 100%;
+        height: 500px;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #aaa;
+        margin: 20px 0;
+        color: #555;
+        font-weight: bold;
+      }
 
-        .diagram {
-            background: #f8fafc;
-            border: 2px dashed #cbd5e1;
-            padding: 2rem;
-            text-align: center;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            font-weight: bold;
-            color: #64748b;
-        }
+      /* Links */
+      a {
+        color: var(--secondary-color);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .card {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 4px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            h1 { font-size: 2rem; }
-        }
+      /* Credits Section */
+      .credits {
+        background-color: #eef5f7;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px 0;
+        text-align: center;
+      }
     </style>
-</head>
-<body>
-
-    <header>
-        <h1>Election Integrity MAS</h1>
-        <span class="subtitle">Multi-Agent System for Misinformation Detection & Voter Assistance</span>
-    </header>
-
+  </head>
+  <body>
     <div class="container">
-        
-        <section id="about">
-            <h2>🗳️ What is this MAS?</h2>
-            <p>
-                The <strong>Election Integrity Multi-Agent System (MAS)</strong> is an AI-driven framework designed to combat misinformation and assist election officials in real-time. Unlike standard chatbots, it maintains persistent memory of the user's role (e.g., Presiding Officer vs. Journalist) and uses a Graph-based architecture to plan, research, and verify claims.
-            </p>
-            <div class="feature-grid">
-                <div class="card">
-                    <strong>🕵️ Fact Checking</strong>
-                    <p>Verifies rumors against official Election Commission manuals and live web search.</p>
-                </div>
-                <div class="card">
-                    <strong>🖼️ Visual Forensics</strong>
-                    <p>Analyzes uploaded images (EVMs, VVPATs) to detect tampering or mismatch.</p>
-                </div>
-                <div class="card">
-                    <strong>🧠 Long-Term Memory</strong>
-                    <p>Remembers user persona and preferences across different sessions.</p>
-                </div>
-            </div>
-        </section>
+      <header>
+        <h1>CONVOLVE 4.0</h1>
+        <div class="text-center subtitle">A Pan-IIT AI/ML Hackathon</div>
+        <div class="text-center track-title">Track: Multi Agent System</div>
 
-        <section id="architecture">
-            <h2>🏗️ System Architecture</h2>
-            <p>The system is built on <strong>LangGraph</strong>, treating the conversation as a state machine. It moves through distinct "Nodes" to process information intelligently.</p>
-            
-            <div class="diagram">
-                [ Loader Node ] ➜ [ Query Generator ] ➜ [ Search Tool ] ➜ [ Responder ] ➜ [ Memory Writer ]
-            </div>
+        <br />
 
-            <ul>
-                <li><strong>Loader Node:</strong> Fetches the user's "Psychological Profile" from Qdrant before the chat starts.</li>
-                <li><strong>Query Generator:</strong> Breaks a complex user question into specific search plans (Visual vs. Text).</li>
-                <li><strong>Search Tool:</strong> Executes Hybrid Search (Dense + Sparse) on the Knowledge Base.</li>
-                <li><strong>Responder:</strong> Synthesizes the final answer using the User Context and Retrieved Evidence.</li>
-                <li><strong>Memory Writer:</strong> Updates the user's profile with new preferences or facts after the conversation.</li>
-            </ul>
-        </section>
+        <div class="text-center">
+          <h3>Presenting Solution for:</h3>
+          <h2>Misinformation Detection in Indian Elections</h2>
+        </div>
 
-        <section id="qdrant">
-            <h2>💾 Qdrant as Memory & Vector DB</h2>
-            <p>We use <strong>Qdrant</strong> for two distinct purposes, separated by collections:</p>
+        <p class="text-center italic-desc">
+          A Graph-based AI Agent for detecting election misinformation,
+          verifying EVM/VVPAT claims, and providing personalized assistance to
+          election officials and citizens using Visual Forensics, detailed
+          vector search and Persistent Memory.
+        </p>
+      </header>
 
-            <h3>1. The Knowledge Base (Static)</h3>
-            <p>Stores official documents (PDFs, Manuals, Guidelines). This is "Read-Only" during chat.</p>
-            <ul>
-                <li><strong>Collection:</strong> <code>election_manuals</code></li>
-                <li><strong>Search Method:</strong> Semantic Search (What does this mean?) + Keyword Search (Specific terms).</li>
-            </ul>
+      <div class="credits">
+        <h3>Powered By:</h3>
+        <p><b>Qdrant</b> as a vector database and memory database.</p>
+        <p><b>LangGraph, LangChain</b> as a framework to build MAS.</p>
+        <br />
+        <h3>Presented By:</h3>
+        <p>
+          <b>Keshav Bhatt</b><br />
+          B.Tech CSE<br />
+          Central University of Jammu
+        </p>
+      </div>
 
-            <h3>2. Long-Term Memory (Dynamic)</h3>
-            <p>Stores User Profiles. This is "Read-Write".</p>
-            <ul>
-                <li><strong>Collection:</strong> <code>user_profiles</code></li>
-                <li><strong>Mechanism:</strong> We do not "Search" for users; we <strong>Retrieve</strong> them using a Deterministic UUID.</li>
-                <li><strong>ID Logic:</strong> <code>uuid5(user_id)</code> ensures "officer_keshav" always maps to the exact same vector ID.</li>
-            </ul>
-        </section>
+      <section>
+        <h1>Problem Statement</h1>
 
-        <section id="embeddings">
-            <h2>🧮 How Embeddings are Generated</h2>
-            <p>The system uses a <strong>Multi-Model Approach</strong> to handle different data types. These models run locally to ensure privacy and speed.</p>
+        <h2>What social are you addressing ?</h2>
+        <p>
+          Misinformation, fake claims, myths are very harmful for an
+          organization and society, when it comes to Indian Elections it is very
+          normal to spread myths and falsie claims such as
+          <i
+            >EVMs can be hacked, or Indelible ink being used by the Election
+            Commission of India is produced from the fat of an animal and
+            dissuaded people from voting during Lok Sabha Elections</i
+          >
+          and so many other disinformation is spread by twitter handles, YouTube
+          videos and magazines.
+        </p>
 
-            <table>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Model Name</th>
-                    <th>Purpose</th>
-                </tr>
-                <tr>
-                    <td><strong>Text</strong></td>
-                    <td><code>intfloat/multilingual-e5-base</code></td>
-                    <td>Converts queries and manuals into 768-dimension vectors. Understands Hindi & English.</td>
-                </tr>
-                <tr>
-                    <td><strong>Images</strong></td>
-                    <td><code>clip-ViT-B-32</code></td>
-                    <td>Converts images into vectors. Allows searching for "Broken Seal" even if the text doesn't say it.</td>
-                </tr>
-                <tr>
-                    <td><strong>Keywords</strong></td>
-                    <td><code>FastEmbed (BM25)</code></td>
-                    <td>Sparse vectors for exact keyword matching (e.g., "Form 17C").</td>
-                </tr>
-            </table>
-        </section>
+        <h2>Why Does it matter?</h2>
+        <ul>
+          <li>
+            Indian Election system has to face lot of problems due to these
+            misinformations and conduct of election becomes difficult, it
+            becomes a news highlight rather than a democratic process.
+          </li>
+          <li>
+            People carrying and believing such info loose their vote and could
+            not choose right leader.
+          </li>
+          <li>
+            One major issue is this type of misinformation spreads very quickly
+            through WhatsApp and other social media platforms.
+          </li>
+          <li>
+            Normal person can not find the correct information in huge ECI
+            manuals.
+          </li>
+          <li>
+            Also officials or professionals of elections such as Presiding
+            officer, Counting Agent has very long manuals and reading them to
+            correct, sometimes feels impossible.
+          </li>
+        </ul>
 
-        <section id="search">
-            <h2>🔍 How Search Works</h2>
-            <p>We use <strong>Hybrid Search (Reciprocal Rank Fusion)</strong> to get the best of both worlds.</p>
+        <p>
+          Election Commission of India keeps the record of disinformation and
+          correct information and provide it via
+          <a href="https://mythvsreality.eci.gov.in/"
+            >https://mythvsreality.eci.gov.in/</a
+          >
+          but it lacks in giving personalized answers and information from
+          official pdfs, and also it is a static source which does not get
+          updated regularly, even though government officers keep doing nullify
+          such false claims.
+        </p>
 
-            <h3>The Process</h3>
-            <ol>
-                <li><strong>Dense Search:</strong> Finds <em>concepts</em>. (e.g., "Machine not working" matches "EVM malfunction").</li>
-                <li><strong>Sparse Search:</strong> Finds <em>exact keywords</em>. (e.g., "Rule 49MA").</li>
-                <li><strong>Fusion:</strong> Qdrant combines these scores. If a document appears in both lists, it is ranked higher.</li>
-            </ol>
+        <ul>
+          <li>
+            Here does our solution provide easy detection of misinformation
+            because it has all the official data scraped from pdfs and press
+            releases of government, twitter known fakes and myths which are
+            busted by some officials, directly scraped from twitter itself.
+          </li>
+          <li>
+            It supports visual recognition so just by uploading images and
+            related claim or without claim it will give the correct information
+            and also correct you if you are wrong.
+          </li>
+          <li>
+            Reach payload schema provides you detailed source information and
+            evidence urls, videos, images.
+          </li>
+          <li>
+            Long term memory is able to give you your personalized answers and
+            depth of knowledge at which you like.
+          </li>
+        </ul>
+      </section>
 
-            <h3>Visual Search</h3>
-            <p>If an image is uploaded:</p>
-            <pre>Image Vector = CLIP.encode(image)
-Results = client.search(vector=Image_Vector)</pre>
-            <p>It finds visually similar images in the database (e.g., matching a user's photo of a VVPAT against official reference photos).</p>
-        </section>
+      <section>
+        <h1>System Design</h1>
 
-        <section id="memory-logic">
-            <h2>🧠 Memory Update & "Decay"</h2>
-            <p>Memory is not just a log of chats; it is a <strong>Structured Psychological Profile</strong>.</p>
+        <h2>Architecture Overview:</h2>
+        <p>
+          The stated Misinformation detection system should have high capability
+          of generating accurate results and user personalized results which is
+          not possible with single agent so here is the multi-agent workflow to
+          solve the problem.
+        </p>
 
-            <h3>Update Mechanism (The Scribe Node)</h3>
-            <p>After every interaction, an LLM analyzes the chat and updates the JSON profile:</p>
-            <pre>{
-  "persona": "Presiding Officer",
-  "style": "Technical & Concise",
-  "preferences": { "show_twitter_links": false }
-}</pre>
-            
-            <h3>Consolidation (Decay Substitute)</h3>
-            <p>Instead of mathematical decay, we use <strong>Summarization Consolidation</strong>. When the profile is updated, the LLM rewrites the summary. Old, irrelevant details are naturally dropped (forgotten) by the LLM during the rewrite, while important facts (Role, Location) are preserved. This mimics human memory consolidation.</p>
-        </section>
+        <div class="img-placeholder">
+          <img src="./assets/Picture1.png" style="height: 500px" />
+        </div>
+        <p class="text-center">
+          <i>System Design for Misinformation Detection System</i>
+        </p>
 
+        <h2>Workflow</h2>
+        <ol>
+          <li>
+            User enters its user name which creates an UUID for each unique
+            user, we will use it to get the payload which stores
+            <b>Long Term Memory</b> of user in Vector Database’s User_Profile
+            Collection.
+          </li>
+          <li>
+            After authentication user get a Thread_id which for which Langgraph
+            makes an unique global state from which any node can read any node
+            can write to, it is used to handle <b>Session-based memory</b> of
+            user because it stores all the chat and responses too, because at
+            the end response will be written to it.
+          </li>
+          <li>
+            User message and attached image_path (if available) is stored into
+            the <b>global state</b>, so finally our state stored all the
+            necessary information about message, thread.
+          </li>
+          <li>
+            Now the first node which works is Long term Memory retrieval node/
+            Context Fetcher and loader node, it uses the user_id hash (UUID) to
+            get the <b>Point of that user from Qdrant</b>, even though this
+            <b>Point has dense_summary_vector and sparse_summary_vector</b> but
+            we do not use any type of search to get the payload,
+            <b>UUID makes it very fast</b>.
+          </li>
+          <li>
+            If the user is found so this node loads whole payload to the global
+            state, which is used to store user’s phycological profile and
+            summary of conversation (not chat history). It looks like this:
+          </li>
+        </ol>
+
+        <div class="code-block code-red">
+          {<br />
+          &nbsp;&nbsp;"user_id": "kb",<br />
+          &nbsp;&nbsp;"name": "Radhe",<br />
+          &nbsp;&nbsp;"location": "Jammu",<br />
+          &nbsp;&nbsp;<b>"persona": "Citizen",</b><br />
+          &nbsp;&nbsp;<b>"interaction_style": "Informative",</b><br />
+          &nbsp;&nbsp;"content_preferences": {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_twitter": true,</b><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_urls": true,</b><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_actions": true</b><br />
+          &nbsp;&nbsp;},<br />
+          &nbsp;&nbsp;"summary": "Radhe is a new user from Jammu who is
+          interested in verifying visual content related to political processes,
+          specifically election procedures. They shared an image they initially
+          misinterpreted as depicting politicians fighting in a vote counting
+          hall, but were open to receiving a detailed explanation with official
+          sources to correct the misinformation. They appear to be a concerned
+          citizen seeking accurate information."<br />
+          }
+        </div>
+
+        <p>Further workflow is divided into following sections.</p>
+
+        <h2>Why Qdrant is essential:</h2>
+        <ul>
+          <li>
+            As a vector database it served really well<b
+              >, sematic search, named vectors, sparse search, indexed payload
+              fields</b
+            >
+            for fast filtering are some use cases that I personally liked most.
+          </li>
+          <li>
+            In my architecture it work for data and memory too, so without this
+            it wouldn’t be possible because it has amazing tutorial series on
+            YouTube, which I think other database does not provide.
+          </li>
+          <li>
+            Since our system handles complex data types (text and potentially
+            images),
+            <b
+              >Qdrant natively manages the vector embeddings generated by our
+              encoder models</b
+            >, allowing for unified storage of diverse data modalities.
+          </li>
+          <li>
+            <b>The qdrant-client</b> library provides a robust,
+            <b>Pythonic interface</b> for managing collections, points, and
+            snapshots, It features first-class
+            <b
+              >support for modern LLM frameworks (LangChain, LlamaIndex),
+              simplifying the implementation of RAG (Retrieval-Augmented
+              Generation) pipelines.</b
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Multimodal Strategy:</h1>
+
+        <h2>What data types are used:</h2>
+        <p>
+          We used two datatypes images and text and embedded three type of
+          information
+        </p>
+        <ol>
+          <li>Disinformation and Information pairs</li>
+          <li>
+            Huge extracted text from official pdfs with proper chapter name,
+            page number and section title
+          </li>
+          <li>
+            Images, image and its description both got embedded for including
+            the capability of text search for images.
+          </li>
+        </ol>
+        <p>More info on this is just below.</p>
+
+        <h2>How embeddings are created</h2>
+        <p>Example Data/Payload of Image:</p>
+
+        <div class="code-block code-red">
+          {<br />
+          &nbsp;&nbsp;"payload": {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"record_type": "official_visual_truth",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"media_type": "image",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"category"</b>: "Polling Station
+          essential",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"title": "SET UP OF POLLING STATION FOR SINGLE
+          ELECTION",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"<span class="code-bold">visual_concepts</span
+          >": [<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Voting Compartment",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Enough Space for Voters",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Seperate entrance and exit for
+          voters"<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"description":</b> "Diagram of Model
+          Polling Station Showing the layout when the polling party consist of 3
+          ………<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"<span class="code-bold">source_name</span>":
+          "ECI Manual on Handbook for Polling Officer",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold"
+            >"source_url": "https://www.eci.gov.in/eci- ",</span
+          ><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold"
+            >"page_number": 13,</span
+          ><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold"
+            >"image_url":
+            "https://github.com/Keshav-CUJ/Qdrant-convole/raw/main/images/Layoutofpollingstation.png",</span
+          ><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold"
+            >"trust_score": 1.0,</span
+          ><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"actionable_intent": "educate_procedure",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"agent_guidance": "If user claims that there
+          is no proper layout of polling station, explain that this is the model
+          layout of polling station as per the ECI Manual."<br />
+          &nbsp;&nbsp;}<br />
+          }
+        </div>
+
+        <p>
+          In this payload embedded fields are
+          <b>image and long description</b> which will definitely go through
+          chucking process but
+          <b>image get easily embedded into 512D vector</b>, it is embedded by
+          <b>openAI’s <i>clip-ViT-B-32 model</i></b> which outperforms in case
+          of images. Image’s description is embedded similar as of other
+          non-image payloads.
+        </p>
+
+        <p>Example Data/Payload of PDF-informatio:</p>
+
+        <div class="code-block code-red">
+          {<br />
+          &nbsp;&nbsp;"payload": {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"record_type": "official_truth",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"source_url":
+          "https://mythvsreality.eci.gov.in/details/evm",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"source_name": "ECI Myth vs Reality",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"trust_score": 1.0,<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold">“chunk”:</span> “There
+          is no need to air condition the room/hall where EVMs are stored.”<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-bold">“chunk_index”:</span>
+          1<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;“<span class="code-bold">Is_chuncked</span>” :
+          true<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"<span class="code-bold"
+            >original_text_content</span
+          >": "There is no need to air condition the room/hall where EVMs are
+          stored. What is required is only to keep…………………………………..”<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"category": "Information on EVM & VVPAT",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"topic_tags": [<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"EVM Electricity dependency",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"EVM manufacturing"<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"evidence_media": [],<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"actionable_intent": "Spread_correct_info"<br />
+          &nbsp;&nbsp;}<br />
+          }
+        </div>
+
+        <h3>Semantic Chunking of LONG-PDF-TEXT</h3>
+        <p>
+          As you can see the above payload is result of chunking process,
+          because the model that is used to embed the text is
+          <b><i>intfloat/multilingual-e5-base</i></b> which expects 512 token as
+          input, and out original_text_content is too large which not fits in
+          <b>512 tokens.</b>
+        </p>
+        <p>
+          So we used best chunking method <b>Semantic Chunking</b> with the help
+          of same embedding model and
+          <b>llama_index’s SemanticSplitterNodeParser</b> which run the
+          embedding model to decide where to chunk semantically, but before this
+          we checked exceeded token counts with the help of Tokenizer of same
+          model. After chunking the chunks get embedded and goes under
+          <b>dense_vector</b> named vector, similarly the image long description
+          also.
+        </p>
+
+        <h3>Sparse vector creation</h3>
+        <p>
+          We created them for <b>keyword based</b> search and fast search and
+          also for implementing hybrid search. They are created from chunks
+          itself so we don’t have to worry about <b>Avg_Doc_length</b>, using
+          <b><i>Qdrant/bm25</i></b> model and we set the
+          <b><i>modifier=models.Modifier.IDF</i></b> for automatic calculation
+          of IDF scores.
+        </p>
+        <p>
+          So finally our single point look like this in
+          <b>vector space of Qdrant:</b>
+        </p>
+
+        <div class="img-placeholder">
+          <img src="./assets/Picture3.png" style="height: 500px" />
+        </div>
+
+        <h3>How embeddings are queried</h3>
+        <p>
+          It is the role of Query builder and data fetcher node, This node
+          creates a list of tools to calls in following format:
+        </p>
+
+        <div class="code-block code-red">
+          [<br />
+          &nbsp;&nbsp;{{<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"tool": "search_image",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"query": "path/to/image.jpg", //It will be
+          used as path so please keep the input path of image.<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"filters": {{"category": "Vote Counting
+          essential"}}, //in case of image you have only one filter i.e.
+          category<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Identify the object"<br />
+          &nbsp;&nbsp;}},<br />
+          &nbsp;&nbsp;{{<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"tool":</b> "search_hybrid",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"query":</b> "EVM hacking bluetooth
+          2024",<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"filters":</b> {{"category": "Busted fake
+          news", "topic_tags": ["Election scams"]}}, //in case of text you can
+          use multiple filters<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"purpose":</b> "Verify the text claim"<br />
+          &nbsp;&nbsp;}}<br />
+          ]
+        </div>
+
+        <p>
+          And its helper function call the nodes tools get top 5 similar
+          results.
+        </p>
+        <p>
+          In case of hybrid searching
+          <b>dense_search() and sparse_search()</b> takes place and then result
+          is combined with the help of <b>Recursive Rank Fusion technique</b>.
+          This node will put the payloads of similar results in the global state
+          as documents, payload.
+        </p>
+        <p>There are three named vectors for each point</p>
+        <ul>
+          <li>
+            <b
+              >Dense_vector / 768 dimensional text vector
+              [intfloat/multilingual-e5-base]</b
+            >
+          </li>
+          <li><b>Sparse_vector //Varying length [Qdrant/bm25]</b></li>
+          <li>
+            <b>Image vector //512 dimensional image vector [clip-ViT-B-32]</b>
+          </li>
+        </ul>
+        <p>
+          When a payload which does not have any image to embed it gets
+          <b
+            >only two text vector but payload which has image to embed gets
+            three vectors</b
+          >
+        </p>
+        <ul>
+          <li><b>Image vector for similarity search via images</b></li>
+          <li>
+            <b
+              >Dense_vector for semantic similarity search (The description of
+              image is embedded in this vector.)</b
+            >
+          </li>
+          <li>
+            <b
+              >Sparse_vector for keyword based search (For making search
+              faster.)</b
+            >
+          </li>
+        </ul>
+        <p>
+          In this way data retrieval node provide very detailed information with
+          fields like evidence URLs, video URLs, tweet URLs, myth, correct
+          information.
+        </p>
+      </section>
+
+      <section>
+        <h1>Search / Memory / Recommendation Logic</h1>
+
+        <h2>How retrieval works</h2>
+        <p>
+          <b>Dense Search -></b> It does use <b>brute force search</b> takes
+          time but gives more semantically correct information.
+        </p>
+        <p>
+          <b>Sparse Search -></b> It does <b>keyword based search</b> gives
+          faster results but average quality.
+        </p>
+        <p>
+          <b>Hybrid Search-></b> <b>Reranks</b> the output of both searches and
+          gives <b>optimal searches</b>.
+        </p>
+        <p>
+          <b
+            >The one more reason to implement each search is user preference if
+            user want the fast search so our retrieval node will call sparse
+            search only, if detailed so it will be do dense search</b
+          >,
+        </p>
+
+        <p>This is the memory schema</p>
+
+        <div class="code-block code-red">
+          {{<br />
+          &nbsp;&nbsp;"name": "...",<br />
+          &nbsp;&nbsp;"location": "...",<br />
+          &nbsp;&nbsp;"persona": "...",<br />
+          &nbsp;&nbsp;<b>"interaction_style": "...",</b> // this field store the
+          type of search if specified<br />
+          &nbsp;&nbsp;<b>"content_preferences": {{</b> //default is true for
+          all.<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_twitter": true,</b><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_urls": true,</b><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>"show_actions": true</b><br />
+          &nbsp;&nbsp;<b>}},</b><br />
+          &nbsp;&nbsp;<b>"summary": "Updated narrative summary..."</b><br />
+          }}
+        </div>
+
+        <h3><b>Indexing the payload fields for faster filtering</b></h3>
+        <p>
+          As we know Qdrant does filtering faster for indexed payload fields so
+          we indexed following fileds
+        </p>
+        <ul>
+          <li><b>Category (Keyword)</b></li>
+          <li><b>Trust_score (float)</b></li>
+          <li><b>Topic_Tags (List)</b></li>
+        </ul>
+        <p>
+          And filter builder helper function can do
+          <b>AND operation in filters</b>.
+        </p>
+
+        <h2><b>How memory is stored, updated, and reused</b></h2>
+        <p>
+          <b
+            >LTM of user is stored in the user_profile collection of Qdrant in
+            which each point has summary as text vector in both sparse and dense
+            style, but
+            <b
+              >we don’t use them we get a point with the help of uuid created
+              from user name.</b
+            ></b
+          >
+        </p>
+
+        <div class="img-placeholder">
+          <img src="./assets/Picture2.png" style="height: 500px" />
+        </div>
+        <p class="text-center">Memory Update/ Create/ Delete logic</p>
+      </section>
+
+      <section>
+        <h1>Limitations & Ethics</h1>
+
+        <h2>Known Failure Modes</h2>
+        <ul>
+          <li>
+            <b>Bias:</b> The system relies on pre-trained embedding models,
+            which may carry inherent demographic or cultural biases that skew
+            retrieval results.
+          </li>
+          <li>
+            <b>Privacy:</b> There is a risk of inadvertently retrieving and
+            sending PII (Personally Identifiable Information) stored in
+            long-term memory to third-party LLM providers.
+          </li>
+          <li>
+            <b>Safety:</b> The database is vulnerable to "memory poisoning,"
+            where malicious prompts stored in history are retrieved later to
+            bypass guardrails.
+          </li>
+        </ul>
+
+        <p>
+          <i
+            >And with this, it is our Misinformation detection system that
+            detects misinformation in election related data, have LTM support,
+            session based memory, multimodal capability, recommendation
+            capability and all required things.</i
+          >
+        </p>
+      </section>
     </div>
-
-    <footer>
-        <p>Documentation generated for MAS Election Agent • 2026</p>
-    </footer>
-
-</body>
+  </body>
 </html>
