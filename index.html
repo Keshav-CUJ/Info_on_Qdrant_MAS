@@ -6,243 +6,286 @@
     <title>Election Integrity MAS - System Documentation</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --bg-color: #f8fafc;
-            --text-color: #334155;
-            --code-bg: #1e293b;
-            --code-text: #e2e8f0;
+            --bg-color: #525659;
+            --paper-color: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --accent-color: #2563eb; /* Royal Blue */
+            --code-bg: #f5f7fa;
+            --border-color: #e5e7eb;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
             background-color: var(--bg-color);
             margin: 0;
-            padding: 0;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        /* PDF Page Simulation */
+        .pdf-page {
+            background-color: var(--paper-color);
+            width: 100%;
+            max-width: 850px; /* A4 width approx */
+            min-height: 1100px; /* A4 height approx */
+            padding: 60px 80px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 28px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: var(--accent-color);
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Numbered Badges for Sections */
+        h2::before {
+            content: attr(data-num);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent-color);
             color: white;
-            padding: 4rem 2rem;
-            text-align: center;
+            font-size: 12px;
+            border-radius: 50%;
+            margin-right: 12px;
         }
 
-        h1 { margin: 0; font-size: 2.5rem; }
-        .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; display: block; }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-top: -30px;
-            border-radius: 8px;
+        h3 {
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        section {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 2rem;
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: var(--text-primary);
+            text-align: justify;
         }
 
-        section:last-child { border-bottom: none; }
-
-        h2 { color: var(--secondary-color); font-size: 1.8rem; margin-top: 0; }
-        h3 { color: var(--primary-color); margin-top: 1.5rem; }
-
-        code {
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            color: #d63384;
-            font-size: 0.9em;
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
         }
 
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Technical Highlights Box */
+        .highlight-box {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        /* JSON/Code Blocks */
         pre {
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 1.5rem;
-            border-radius: 8px;
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 6px;
             overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: #d63384;
+            margin: 15px 0;
         }
 
-        .diagram {
-            background: #f8fafc;
+        /* Diagram Placeholder */
+        .diagram-block {
+            background-color: #f8fafc;
             border: 2px dashed #cbd5e1;
-            padding: 2rem;
+            padding: 20px;
             text-align: center;
-            border-radius: 8px;
-            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #475569;
+            margin: 25px 0;
+            border-radius: 6px;
             font-weight: bold;
-            color: #64748b;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .card {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 4px;
-        }
-
-        footer {
+        .page-footer {
+            margin-top: 50px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
             text-align: center;
-            padding: 2rem;
-            color: #64748b;
-            font-size: 0.9rem;
+            font-size: 12px;
+            color: #999;
         }
 
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            h1 { font-size: 2rem; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .pdf-page { width: 95%; padding: 40px; height: auto; }
+        }
+        @media print {
+            body { background-color: white; padding: 0; }
+            .pdf-page { box-shadow: none; margin: 0; width: 100%; max-width: none; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Election Integrity MAS</h1>
-        <span class="subtitle">Multi-Agent System for Misinformation Detection & Voter Assistance</span>
-    </header>
+    <div class="pdf-page">
+        <h1>Election Integrity Multi-Agent System (MAS)</h1>
 
-    <div class="container">
-        
-        <section id="about">
-            <h2>🗳️ What is this MAS?</h2>
+        <section>
+            <h2 data-num="1">Problem Statement</h2>
+            
+            <h3>What societal issue are you addressing?</h3>
             <p>
-                The <strong>Election Integrity Multi-Agent System (MAS)</strong> is an AI-driven framework designed to combat misinformation and assist election officials in real-time. Unlike standard chatbots, it maintains persistent memory of the user's role (e.g., Presiding Officer vs. Journalist) and uses a Graph-based architecture to plan, research, and verify claims.
+                We are addressing the critical challenge of <strong>election misinformation</strong> and the lack of immediate, verified technical support for election officials on the ground. In high-stakes environments, rumors about EVM (Electronic Voting Machine) tampering or procedural errors—such as "171 additional votes being polled in Dima Hasao"—spread faster than official verifications.
             </p>
-            <div class="feature-grid">
-                <div class="card">
-                    <strong>🕵️ Fact Checking</strong>
-                    <p>Verifies rumors against official Election Commission manuals and live web search.</p>
-                </div>
-                <div class="card">
-                    <strong>🖼️ Visual Forensics</strong>
-                    <p>Analyzes uploaded images (EVMs, VVPATs) to detect tampering or mismatch.</p>
-                </div>
-                <div class="card">
-                    <strong>🧠 Long-Term Memory</strong>
-                    <p>Remembers user persona and preferences across different sessions.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="architecture">
-            <h2>🏗️ System Architecture</h2>
-            <p>The system is built on <strong>LangGraph</strong>, treating the conversation as a state machine. It moves through distinct "Nodes" to process information intelligently.</p>
             
-            <div class="diagram">
-                [ Loader Node ] ➜ [ Query Generator ] ➜ [ Search Tool ] ➜ [ Responder ] ➜ [ Memory Writer ]
-            </div>
-
-            <ul>
-                <li><strong>Loader Node:</strong> Fetches the user's "Psychological Profile" from Qdrant before the chat starts.</li>
-                <li><strong>Query Generator:</strong> Breaks a complex user question into specific search plans (Visual vs. Text).</li>
-                <li><strong>Search Tool:</strong> Executes Hybrid Search (Dense + Sparse) on the Knowledge Base.</li>
-                <li><strong>Responder:</strong> Synthesizes the final answer using the User Context and Retrieved Evidence.</li>
-                <li><strong>Memory Writer:</strong> Updates the user's profile with new preferences or facts after the conversation.</li>
-            </ul>
+            <h3>Why does it matter?</h3>
+            <p>
+                Trust is the currency of democracy. When Presiding Officers cannot instantly access technical manuals, or when citizens are misled by fake images of "broken seals," confidence in the electoral process erodes. Our system bridges this gap by providing instant, manual-verified answers and visual forensics. It ensures that <strong>official truth travels as fast as the rumors</strong>, empowering officials to debunk myths like the "Bluetooth hacking" claims instantly with cited evidence.
+            </p>
         </section>
 
-        <section id="qdrant">
-            <h2>💾 Qdrant as Memory & Vector DB</h2>
-            <p>We use <strong>Qdrant</strong> for two distinct purposes, separated by collections:</p>
-
-            <h3>1. The Knowledge Base (Static)</h3>
-            <p>Stores official documents (PDFs, Manuals, Guidelines). This is "Read-Only" during chat.</p>
-            <ul>
-                <li><strong>Collection:</strong> <code>election_manuals</code></li>
-                <li><strong>Search Method:</strong> Semantic Search (What does this mean?) + Keyword Search (Specific terms).</li>
-            </ul>
-
-            <h3>2. Long-Term Memory (Dynamic)</h3>
-            <p>Stores User Profiles. This is "Read-Write".</p>
-            <ul>
-                <li><strong>Collection:</strong> <code>user_profiles</code></li>
-                <li><strong>Mechanism:</strong> We do not "Search" for users; we <strong>Retrieve</strong> them using a Deterministic UUID.</li>
-                <li><strong>ID Logic:</strong> <code>uuid5(user_id)</code> ensures "officer_keshav" always maps to the exact same vector ID.</li>
-            </ul>
-        </section>
-
-        <section id="embeddings">
-            <h2>🧮 How Embeddings are Generated</h2>
-            <p>The system uses a <strong>Multi-Model Approach</strong> to handle different data types. These models run locally to ensure privacy and speed.</p>
-
-            <table>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Model Name</th>
-                    <th>Purpose</th>
-                </tr>
-                <tr>
-                    <td><strong>Text</strong></td>
-                    <td><code>intfloat/multilingual-e5-base</code></td>
-                    <td>Converts queries and manuals into 768-dimension vectors. Understands Hindi & English.</td>
-                </tr>
-                <tr>
-                    <td><strong>Images</strong></td>
-                    <td><code>clip-ViT-B-32</code></td>
-                    <td>Converts images into vectors. Allows searching for "Broken Seal" even if the text doesn't say it.</td>
-                </tr>
-                <tr>
-                    <td><strong>Keywords</strong></td>
-                    <td><code>FastEmbed (BM25)</code></td>
-                    <td>Sparse vectors for exact keyword matching (e.g., "Form 17C").</td>
-                </tr>
-            </table>
-        </section>
-
-        <section id="search">
-            <h2>🔍 How Search Works</h2>
-            <p>We use <strong>Hybrid Search (Reciprocal Rank Fusion)</strong> to get the best of both worlds.</p>
-
-            <h3>The Process</h3>
-            <ol>
-                <li><strong>Dense Search:</strong> Finds <em>concepts</em>. (e.g., "Machine not working" matches "EVM malfunction").</li>
-                <li><strong>Sparse Search:</strong> Finds <em>exact keywords</em>. (e.g., "Rule 49MA").</li>
-                <li><strong>Fusion:</strong> Qdrant combines these scores. If a document appears in both lists, it is ranked higher.</li>
-            </ol>
-
-            <h3>Visual Search</h3>
-            <p>If an image is uploaded:</p>
-            <pre>Image Vector = CLIP.encode(image)
-Results = client.search(vector=Image_Vector)</pre>
-            <p>It finds visually similar images in the database (e.g., matching a user's photo of a VVPAT against official reference photos).</p>
-        </section>
-
-        <section id="memory-logic">
-            <h2>🧠 Memory Update & "Decay"</h2>
-            <p>Memory is not just a log of chats; it is a <strong>Structured Psychological Profile</strong>.</p>
-
-            <h3>Update Mechanism (The Scribe Node)</h3>
-            <p>After every interaction, an LLM analyzes the chat and updates the JSON profile:</p>
-            <pre>{
-  "persona": "Presiding Officer",
-  "style": "Technical & Concise",
-  "preferences": { "show_twitter_links": false }
-}</pre>
+        <section>
+            <h2 data-num="2">System Design</h2>
             
-            <h3>Consolidation (Decay Substitute)</h3>
-            <p>Instead of mathematical decay, we use <strong>Summarization Consolidation</strong>. When the profile is updated, the LLM rewrites the summary. Old, irrelevant details are naturally dropped (forgotten) by the LLM during the rewrite, while important facts (Role, Location) are preserved. This mimics human memory consolidation.</p>
+            <h3>Architecture Overview</h3>
+            <p>
+                The system is architected as a stateful Multi-Agent System using <strong>LangGraph</strong>. It treats the conversation as a workflow graph rather than a simple chatbot loop.
+            </p>
+            <div class="diagram-block">
+                [ Loader ] ➜ [ Query Generator ] ➜ [ Search Tool (Hybrid) / Visual Tool ] ➜ [ Responder ] ➜ [ Memory Scribe ]
+            </div>
+            <p>
+                The <strong>Query Generator Node</strong> creates a list of tools to call in a strict JSON format (e.g., <code>search_image</code> for object identification or <code>search_hybrid</code> for verifying text claims). The <strong>Responder Node</strong> then synthesizes the retrieved evidence—including "Official Truth" records, debunked myths, and tweet URLs—into a coherent answer.
+            </p>
+
+            <h3>Why Qdrant is critical to your solution</h3>
+            <p>
+                Qdrant serves as the central integration hub of our AI, not just a storage engine. It was critical because:
+            </p>
+            <ul>
+                <li><strong>Multi-Model Integration:</strong> It allowed us to seamlessly integrate disparate libraries—connecting <code>FastEmbed</code> for lightweight text embedding, <code>CLIP</code> for image analysis, and <code>FlashRank</code> for re-ranking results.</li>
+                <li><strong>Hybrid Data Collection:</strong> We utilize Qdrant's ability to store three named vectors per point: a 768D dense vector, a sparse vector (BM25), and a 512D image vector. This allows a single database to handle keyword, semantic, and visual search simultaneously.</li>
+                <li><strong>Indexed Filtering:</strong> We indexed fields like <code>Trust_score</code> and <code>Topic_Tags</code> to perform high-speed filtering (e.g., <code>"category": "Busted fake news"</code>) before the vector search even begins.</li>
+            </ul>
         </section>
 
+        <section>
+            <h2 data-num="3">Multimodal Strategy</h2>
+            
+            <h3>What data types are used</h3>
+            <p>
+                The system processes a rich variety of data types to create a holistic knowledge base:
+            </p>
+            <ul>
+                <li><strong>Official Texts:</strong> Huge extracted texts from official PDFs (Manuals, Handbooks) with proper chapter names and page numbers.</li>
+                <li><strong>Disinformation Pairs:</strong> Structured "Myth vs Reality" pairs (e.g., the Assam 2021 incident clarification).</li>
+                <li><strong>Visual Data:</strong> Diagrams of polling stations and images of EVM units. Crucially, we embed both the image itself <em>and</em> its long text description to allow for text-to-image search.</li>
+            </ul>
+
+            <h3>How embeddings are created and queried</h3>
+            <p>
+                We employ a local, multi-model embedding strategy to ensure privacy and speed:
+            </p>
+            <div class="highlight-box">
+                <strong>1. Text:</strong> <code>intfloat/multilingual-e5-base</code> (768D) for semantic understanding of Hindi/English.<br>
+                <strong>2. Images:</strong> <code>clip-ViT-B-32</code> (512D) for visual similarity (e.g., identifying a VVPAT).<br>
+                <strong>3. Keywords:</strong> <code>Qdrant/bm25</code> for sparse vector generation.
+            </div>
+            <p>
+                <strong>Semantic Chunking:</strong> Since the E5 model expects 512 tokens, we use <code>llama_index’s SemanticSplitterNodeParser</code>. This runs the embedding model to intelligently decide where to "break" a long PDF chapter so that context is preserved, rather than breaking sentences arbitrarily.
+            </p>
+        </section>
+        
+        <div class="page-footer">
+            Page 1 of 2 • Election Integrity System Documentation
+        </div>
     </div>
 
-    <footer>
-        <p>Documentation generated for MAS Election Agent • 2026</p>
-    </footer>
+    <div class="pdf-page">
+        <section>
+            <h2 data-num="4">Search & Memory Logic</h2>
+            
+            <h3>How retrieval works</h3>
+            <p>
+                Our data retrieval node uses a <strong>Recursive Rank Fusion</strong> technique to combine results from two distinct search methods:
+            </p>
+            <ul>
+                <li><strong>Dense Search:</strong> Uses brute-force nearest neighbor search on the 768D vectors. It takes more time but provides semantically correct concepts (e.g., understanding that "machine dead" means "battery failure").</li>
+                <li><strong>Sparse Search:</strong> Uses keyword-based search on the sparse vectors. It is faster and ensures that specific terms like "Rule 49MA" are strictly matched.</li>
+            </ul>
+            <p>
+                The system also adapts to user preference: if the user's interaction style is "fast", the node will prioritize Sparse Search; if "detailed", it triggers the full Dense Search.
+            </p>
+
+            <h3>How memory is stored, updated, and reused</h3>
+            <p>
+                Memory is stored in a dedicated <code>user_profiles</code> collection in Qdrant.
+            </p>
+            <ul>
+                <li><strong>Storage:</strong> We do not search for users; we retrieve them using a deterministic UUID (<code>uuid5</code>) derived from their username. This creates a persistent "Psychological Profile".</li>
+                <li><strong>Schema:</strong> The profile contains fields like <code>persona</code> (e.g., "Presiding Officer"), <code>interaction_style</code>, and a <code>summary</code> of the narrative.</li>
+                <li><strong>Update Logic (The Scribe):</strong> After every interaction, the "Memory Update Node" reads the User Message, the Responder's Reply, and the Old Schema. It passes these to an LLM which rewrites the summary.</li>
+                <li><strong>Decay:</strong> Instead of mathematical decay, we use <strong>Summarization Consolidation</strong>. Old, irrelevant details naturally drop out of the summary during the LLM's rewrite process, while core facts (Role, Location) persist.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 data-num="5">Limitations & Ethics</h2>
+            
+            <h3>Known Failure Modes</h3>
+            <p>
+                The system relies heavily on the "Official Truth" records. If a specific edge case is not covered in the ECI manuals or the "Myth vs Reality" database, the agent may default to a generic "ignore_and_report" intent. Additionally, extremely low-light or blurry images may fail the CLIP analysis, leading to incorrect object identification.
+            </p>
+
+            <h3>Bias, Privacy, or Safety Considerations</h3>
+            <p>
+                <strong>Privacy:</strong> We prioritize user privacy by running embeddings locally. No raw user images are sent to third-party model training sets; they are vectorised in RAM and discarded immediately after the search.
+            </p>
+            <p>
+                <strong>Safety Guardrails:</strong> The system is designed with strict `actionable_intent` categories (e.g., `educate_procedure`, `Spread_correct_info`). It is strictly prohibited from generating political opinions. If a user asks subjective questions, the `agent_guidance` field directs the AI to stick strictly to the ECI Manual's procedural text, ensuring non-partisanship.
+            </p>
+        </section>
+
+        <div class="page-footer">
+            Page 2 of 2 • Election Integrity System Documentation
+        </div>
+    </div>
 
 </body>
 </html>
